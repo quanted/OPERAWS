@@ -1,0 +1,10 @@
+CDKDesc.csv
+CDKerr.log
+CDKlogfile.log
+PadelDesc.csv
+PadelFP.csv
+PaDELlogfile.log
+PaDELlogfileFP.log
+temp/*
+__pycache__
+env/
