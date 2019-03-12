@@ -40,7 +40,8 @@ class OPERACLI(CLIArgs, OPERAResults):
 			"-s", smiles_filename,  # sets input smiles file
 			"-o", predictions_filename,  # sets output csv file
 			# "-c",  # cleans temp files from calculations
-			"-a"])  # gets all opera properties
+			# "-a"])  # gets all opera properties
+			"-e", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])
 
 	def build_endpoint_args(self):
 		"""
