@@ -8,6 +8,7 @@ import os
 import tempfile
 import uuid
 import glob
+import time
 from opera_cli_args import CLIArgs
 from opera_cli_results import OPERAResults
 
@@ -41,7 +42,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 			"-o", predictions_filename,  # sets output csv file
 			# "-c",  # cleans temp files from calculations
 			# "-a"])  # gets all opera properties
-			"-e", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])
+			"-e", "HL", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])
 
 	def build_endpoint_args(self):
 		"""
@@ -96,12 +97,15 @@ class OPERACLI(CLIArgs, OPERAResults):
 		Runs OPERA CLI routine.
 		"""
 		try:
+			start = time.time()
 			smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
 			self.smiles_full_path = smiles_tempfile.name
 			self.predictions_full_path = "temp/" + self.generate_filename() + ".csv"  # generates unique filename
 			self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli
 			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
 			self.remove_temp_files(smiles_tempfile)
+			end = time.time()
+			# print("Execution time (s): {}".format(end - start))
 			return predictions_data
 		except Exception as e:
 			logging.warning("Exception running OPERA: {}".format(e))

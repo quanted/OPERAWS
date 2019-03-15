@@ -8,3 +8,4 @@ PaDELlogfileFP.log
 temp/*
 __pycache__
 env/
+*.pyc
