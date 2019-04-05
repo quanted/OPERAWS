@@ -38,7 +38,9 @@ def run_opera():
 	"""
 	post_dict = request.get_json()
 	requested_smiles = post_dict['smiles']
-	opera_results = OPERACLI().run_opera_routine([requested_smiles])  # opera_cli expecting list of smiles
+	if not isinstance(requested_smiles, list):
+		requested_smiles = [requested_smiles]
+	opera_results = OPERACLI().run_opera_routine(requested_smiles)  # opera_cli expecting list of smiles
 	return jsonify({"status": True, "data": opera_results})
 
 if __name__ == '__main__':
