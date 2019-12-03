@@ -13,12 +13,22 @@ from opera_cli_args import CLIArgs
 from opera_cli_results import OPERAResults
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-print("PROJECT_ROOT: {}".format(PROJECT_ROOT))
+logging.info("PROJECT_ROOT: {}".format(PROJECT_ROOT))
 
 OPERA_EXE_PATH = os.path.join("c:", os.sep, "Program Files", "OPERA", "application")
 if os.environ.get('OPERA_EXE_PATH'):
 	OPERA_EXE_PATH = os.environ.get('OPERA_EXE_PATH')
-print("OPERA_EXE_PATH: {}".format(OPERA_EXE_PATH))
+logging.info("OPERA_EXE_PATH: {}".format(OPERA_EXE_PATH))
+
+IS_LINUX = False
+if os.environ.get('IS_LINUX') == "True":
+	IS_LINUX = True
+logging.info("IS_LINUX: {}".format(IS_LINUX))
+
+MATLAB_RUNTIME_PATH = "/usr/local/MATLAB/MATLAB_Runtime/v94"
+if os.environ.get('MATLAB_RUNTIME_PATH'):
+	MATLAB_RUNTIME_PATH = os.environ.get('MATLAB_RUNTIME_PATH')
+logging.info("MATLAB_RUNTIME_PATH: {}".format(MATLAB_RUNTIME_PATH))
 
 class OPERACLI(CLIArgs, OPERAResults):
 
@@ -28,6 +38,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 		self.cli_example_1 = "OPERA -s Sample_50.sdf -o predictions.csv -a -x -n -v 2"
 		self.cli_example_2 = "opera -d Sample_50.csv -o predictions.txt -e logP BCF -v 1"
 		self.opera_exe_location = OPERA_EXE_PATH
+		self.matlab_path = MATLAB_RUNTIME_PATH
 		self.smiles_file_location = PROJECT_ROOT
 		self.predictions_file_location = PROJECT_ROOT
 		self.smiles_full_path = ""  # full path and filename for smiles input file
@@ -41,8 +52,21 @@ class OPERACLI(CLIArgs, OPERAResults):
 			"-s", smiles_filename,  # sets input smiles file
 			"-o", predictions_filename,  # sets output csv file
 			# "-c",  # cleans temp files from calculations
-			# "-a"])  # gets all opera properties
-			"-e", "HL", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])
+			"-a"])  # gets all opera properties
+			# "-e", "HL", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])
+
+	def execute_opera_linux(self, smiles_filename, predictions_filename):
+		"""
+		Execute OPERA in linux docker container.
+		"""
+		logging.warning("Running linux subprocess.")
+		subprocess.run(["sh", self.opera_exe_location,
+			self.matlab_path,
+			"-s", smiles_filename,  # sets input smiles file
+			"-o", predictions_filename,  # sets output csv file
+			"-a",
+			"-v", "3"])  # gets all opera properties
+			# "-e", "HL", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])		
 
 	def build_endpoint_args(self):
 		"""
@@ -62,7 +86,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 		Outputs: smiles tempfile name.
 		"""
 		# tempfile_obj = open("temp/" + self.generate_filename() + ".smi", "w")
-		tempfile_obj = open("temp/" + self.generate_filename() + ".smi", "w")
+		tempfile_obj = open(os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".smi"), "w")
 		smiles_string = ""
 		for smiles in smiles_list:
 			smiles_string += smiles + "\n"
@@ -96,18 +120,24 @@ class OPERACLI(CLIArgs, OPERAResults):
 		"""
 		Runs OPERA CLI routine.
 		"""
-		try:
-			start = time.time()
-			smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
-			self.smiles_full_path = smiles_tempfile.name
-			self.predictions_full_path = "temp/" + self.generate_filename() + ".csv"  # generates unique filename
-			self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli
-			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
-			self.remove_temp_files(smiles_tempfile)
-			end = time.time()
-			# print("Execution time (s): {}".format(end - start))
-			return predictions_data
-		except Exception as e:
-			logging.warning("Exception running OPERA: {}".format(e))
-			self.remove_temp_files(smiles_tempfile)
-			pass
+		# try:
+		start = time.time()
+		smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
+		self.smiles_full_path = smiles_tempfile.name
+		# self.predictions_full_path = "temp/" + self.generate_filename() + ".csv"  # generates unique filename
+		self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
+		logging.warning("Initiating OPERA CLI execution.")
+		if IS_LINUX:
+			self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
+		else:
+			self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
+		logging.warning("Finished executing OPERA CLI.")
+		predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
+		self.remove_temp_files(smiles_tempfile)
+		end = time.time()
+		logging.warning("Execution time (s): {}".format(end - start))
+		return predictions_data
+		# except Exception as e:
+		# 	logging.warning("Exception running OPERA: {}".format(e))
+		# 	self.remove_temp_files(smiles_tempfile)
+		# 	pass

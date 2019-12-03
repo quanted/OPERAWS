@@ -40,7 +40,9 @@ def run_opera():
 	requested_smiles = post_dict['smiles']
 	if not isinstance(requested_smiles, list):
 		requested_smiles = [requested_smiles]
+	logging.warning("Starting OPERA CLI routine.")
 	opera_results = OPERACLI().run_opera_routine(requested_smiles)  # opera_cli expecting list of smiles
+	logging.warning("Returning OPERA CLI results.")
 	return jsonify({"status": True, "data": opera_results})
 
 if __name__ == '__main__':
