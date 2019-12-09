@@ -6,6 +6,7 @@ RUN pip install -r /tmp/requirements.txt
 
 ENV OPERA_EXE_PATH=/usr/local/bin/OPERA/application/run_OPERA.sh
 ENV MATLAB_RUNTIME_PATH=/usr/local/MATLAB/MATLAB_Runtime/v94
+ENV LD_LIBRARY_PATH=.:/usr/local/MATLAB/MATLAB_Runtime/v94/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v94/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v94/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v94/sys/opengl/lib/glnxa64
 ENV IS_LINUX=True
 
 COPY . /src
