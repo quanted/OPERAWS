@@ -34,4 +34,4 @@ RUN	mkdir -p /usr/share/man/man1 && \
 
 EXPOSE 3344
 
-CMD ["waitress-serve", "--port=3344", "wsgi_flask:app"]
+CMD ["waitress-serve", "--port=3344", "opera_flask:app"]
