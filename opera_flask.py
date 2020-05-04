@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify
 import os
+import time
 import logging
+
+# Local imports:
 from opera_cli import OPERACLI
 
 app = Flask(__name__)
@@ -40,10 +43,18 @@ def run_opera():
 	requested_smiles = post_dict['smiles']
 	if not isinstance(requested_smiles, list):
 		requested_smiles = [requested_smiles]
-	logging.warning("Starting OPERA CLI routine.")
+	logging.info("Starting OPERA CLI routine.")
+	start_time = time.time()
 	opera_results = OPERACLI().run_opera_routine(requested_smiles)  # opera_cli expecting list of smiles
-	logging.warning("Returning OPERA CLI results.")
-	return jsonify({"status": True, "data": opera_results})
+	logging.info("Returning OPERA CLI results.")
+	return jsonify({
+		"status": True,
+		"data": opera_results,
+		"meta": {
+			"exec_time": round(time.time() - start_time, 1),
+			"exec_units": "seconds"
+		}
+	})
 
 if __name__ == '__main__':
 	app.run(debug=True)

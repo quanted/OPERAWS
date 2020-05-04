@@ -48,6 +48,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 		"""
 		Executes OPERA CLI.
 		"""
+		logging.warning("Executing OPERA.exe in Windows.")
 		subprocess.run([os.path.join(self.opera_exe_location, "opera"),
 			"-s", smiles_filename,  # sets input smiles file
 			"-o", predictions_filename,  # sets output csv file
@@ -64,20 +65,8 @@ class OPERACLI(CLIArgs, OPERAResults):
 			self.matlab_path,
 			"-s", smiles_filename,  # sets input smiles file
 			"-o", predictions_filename,  # sets output csv file
-			"-a",
-			"-v", "3"])  # gets all opera properties
+			"-a"])  # gets all opera properties
 			# "-e", "HL", "LogP", "MP", "BP", "LogVP", "LogWS", "pKa", "LogD", "LogBCF", "LogKoc"])		
-
-	def build_endpoint_args(self):
-		"""
-		Creates string of endpoint args (pchem properties) to predict.
-		Note: cts_endpoints from opera_cli_args.CLIArgs.
-		Command-line example: opera -s input_file.smi -o predictions.csv -e MP BP logVP
-		"""
-		arg_string = ""
-		for endpoint in self.cts_endpoints:
-			arg_string += endpoint + " "
-		return arg_string
 
 	def create_smiles_tempfile(self, smiles_list):
 		"""
@@ -120,24 +109,21 @@ class OPERACLI(CLIArgs, OPERAResults):
 		"""
 		Runs OPERA CLI routine.
 		"""
-		# try:
-		start = time.time()
-		smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
-		self.smiles_full_path = smiles_tempfile.name
-		# self.predictions_full_path = "temp/" + self.generate_filename() + ".csv"  # generates unique filename
-		self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
-		logging.warning("Initiating OPERA CLI execution.")
-		if IS_LINUX:
-			self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
-		else:
-			self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
-		logging.warning("Finished executing OPERA CLI.")
-		predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
-		self.remove_temp_files(smiles_tempfile)
-		end = time.time()
-		logging.warning("Execution time (s): {}".format(end - start))
-		return predictions_data
-		# except Exception as e:
-		# 	logging.warning("Exception running OPERA: {}".format(e))
-		# 	self.remove_temp_files(smiles_tempfile)
-		# 	pass
+		try:
+			self.remove_all_temp_files()
+			smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
+			self.smiles_full_path = smiles_tempfile.name
+			self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
+			logging.info("Initiating OPERA CLI execution.")
+			if IS_LINUX:
+				self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
+			else:
+				self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
+			logging.info("Finished executing OPERA CLI.")
+			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
+			self.remove_temp_files(smiles_tempfile)
+			return predictions_data
+		except Exception as e:
+			logging.warning("Exception running OPERA: {}".format(e))
+			self.remove_temp_files(smiles_tempfile)
+			pass
