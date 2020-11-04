@@ -5,12 +5,16 @@ Calling OPERA CLI from Python.
 import subprocess
 import logging
 import os
+import sys
 import tempfile
 import uuid
 import glob
 import time
 from opera_cli_args import CLIArgs
 from opera_cli_results import OPERAResults
+
+import libOPERA_Py as OPERA
+
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 logging.info("PROJECT_ROOT: {}".format(PROJECT_ROOT))
@@ -30,6 +34,7 @@ if os.environ.get('MATLAB_RUNTIME_PATH'):
 	MATLAB_RUNTIME_PATH = os.environ.get('MATLAB_RUNTIME_PATH')
 logging.info("MATLAB_RUNTIME_PATH: {}".format(MATLAB_RUNTIME_PATH))
 
+
 class OPERACLI(CLIArgs, OPERAResults):
 
 	def __init__(self):
@@ -43,6 +48,17 @@ class OPERACLI(CLIArgs, OPERAResults):
 		self.predictions_file_location = PROJECT_ROOT
 		self.smiles_full_path = ""  # full path and filename for smiles input file
 		self.predictions_full_path = ""  # full path and filename for predictions csv output
+
+		self.opera = OPERA.initialize()  # initializes OPERA instance
+
+	def execute_opera_py(self, smiles_filename, predictions_filename):
+		"""
+		Executes libOPERA_Py.
+		"""
+		logging.warning("Executing libOPERA_Py library.")
+		self.opera.OPERA('-s', smiles_filename, '-o', predictions_filename, '-a')  # TODO: Try specific props (is it faster?).
+		# TODO: Still read from CSV or handle matlab data object?
+
 
 	def execute_opera(self, smiles_filename, predictions_filename):
 		"""
@@ -60,7 +76,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 		"""
 		Execute OPERA in linux docker container.
 		"""
-		logging.warning("Running linux subprocess.")
+		logging.warning("Executing OPERA in Linux.")
 		subprocess.run(["sh", self.opera_exe_location,
 			self.matlab_path,
 			"-s", smiles_filename,  # sets input smiles file
@@ -115,10 +131,11 @@ class OPERACLI(CLIArgs, OPERAResults):
 			self.smiles_full_path = smiles_tempfile.name
 			self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
 			logging.info("Initiating OPERA CLI execution.")
-			if IS_LINUX:
-				self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
-			else:
-				self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
+			self.execute_opera_py(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
+			# if IS_LINUX:
+			# 	self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
+			# else:
+			# 	self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
 			logging.info("Finished executing OPERA CLI.")
 			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
 			self.remove_temp_files(smiles_tempfile)
@@ -127,3 +144,16 @@ class OPERACLI(CLIArgs, OPERAResults):
 			logging.warning("Exception running OPERA: {}".format(e))
 			self.remove_temp_files(smiles_tempfile)
 			pass
+
+
+
+if __name__ == '__main__':
+	
+	method = sys.argv[1]
+
+	if method == 'init':
+		# Dry run of OPERA
+		print("Running opera_cli.py 'init'.")
+		opera_cli = OPERACLI()
+		# opera_cli.execute_opera_py('tests/test_smiles.smi', 'test_results.csv')
+
