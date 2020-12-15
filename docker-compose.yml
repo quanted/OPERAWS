@@ -1,0 +1,14 @@
+version: '3.1'
+
+services:
+
+  # OPERA Webservices
+  operaws:
+    build:
+      context: ../operaws
+      dockerfile: Dockerfile
+    image: quanted/operaws
+    ports:
+      - "3344:3344"
+    environment:
+      - HOSTNAME=docker
