@@ -57,8 +57,6 @@ class OPERACLI(CLIArgs, OPERAResults):
 		"""
 		logging.warning("Executing libOPERA_Py library.")
 		self.opera.OPERA('-s', smiles_filename, '-o', predictions_filename, '-a')  # TODO: Try specific props (is it faster?).
-		# TODO: Still read from CSV or handle matlab data object?
-
 
 	def execute_opera(self, smiles_filename, predictions_filename):
 		"""
@@ -130,13 +128,9 @@ class OPERACLI(CLIArgs, OPERAResults):
 			smiles_tempfile = self.create_smiles_tempfile(smiles_list)  # creates temp file for smiles
 			self.smiles_full_path = smiles_tempfile.name
 			self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
-			logging.info("Initiating OPERA CLI execution.")
+			logging.warning("Initiating OPERA CLI execution.")
 			self.execute_opera_py(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
-			# if IS_LINUX:
-			# 	self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (linux)
-			# else:
-			# 	self.execute_opera(self.smiles_full_path, self.predictions_full_path)  # runs opera cli (windows, default)
-			logging.info("Finished executing OPERA CLI.")
+			logging.warning("Finished executing OPERA CLI.")
 			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
 			self.remove_temp_files(smiles_tempfile)
 			return predictions_data
