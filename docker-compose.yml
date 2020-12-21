@@ -8,6 +8,7 @@ services:
       context: ../operaws
       dockerfile: Dockerfile
     image: quanted/operaws
+    container_name: operaws
     ports:
       - "3344:3344"
     environment:
