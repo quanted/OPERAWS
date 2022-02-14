@@ -15,7 +15,7 @@ Extract the zip file, and run “OPERA2.3_mcr_Installer.exe”. Once finished, m
 
 On the Windows VM, pull down the OPERAWS repository:
 
-git pull https://github.com/popenc/OPERAWS
+git pull https://github.com/quanted/OPERAWS
 cd OPERAWS
 git checkout dev
 
