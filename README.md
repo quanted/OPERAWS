@@ -9,7 +9,7 @@ Install Python 3 onto the computer.
 
 Download and install OPERA application:
 	
-Install link: https://github.com/kmansouri/OPERA/releases/download/v2.3-beta3/OPERA2.3_CL_mcr_win.zip
+Install link: https://github.com/kmansouri/OPERA/releases
 
 Extract the zip file, and run “OPERA2.3_mcr_Installer.exe”. Once finished, make sure the application is installed at “C:\Program Files\OPERA”.
 
