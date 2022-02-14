@@ -7,3 +7,5 @@ PadelFP.csv
 PaDELlogfile.log
 PaDELlogfileFP.log
 temp/*
+.git
+.cache
