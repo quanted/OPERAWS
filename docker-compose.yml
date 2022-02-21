@@ -6,7 +6,7 @@ services:
   operaws:
     restart: unless-stopped
     build:
-      context: ../operaws
+      context: .
       dockerfile: Dockerfile
     image: quanted/operaws
     container_name: operaws
