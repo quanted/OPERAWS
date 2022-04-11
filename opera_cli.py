@@ -13,7 +13,7 @@ import time
 from opera_cli_args import CLIArgs
 from opera_cli_results import OPERAResults
 
-# import libOPERA_Py as OPERA
+import libOPERA_Py as OPERA
 
 
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
@@ -49,14 +49,14 @@ class OPERACLI(CLIArgs, OPERAResults):
 		self.smiles_full_path = ""  # full path and filename for smiles input file
 		self.predictions_full_path = ""  # full path and filename for predictions csv output
 
-		# self.opera = OPERA.initialize()  # initializes OPERA instance
+		self.opera = OPERA.initialize()  # initializes OPERA instance
 
-	# def execute_opera_py(self, smiles_filename, predictions_filename):
-	# 	"""
-	# 	Executes libOPERA_Py.
-	# 	"""
-	# 	logging.warning("Executing libOPERA_Py library.")
-	# 	self.opera.OPERA('-s', smiles_filename, '-o', predictions_filename, '-a')  # TODO: Try specific props (is it faster?).
+	def execute_opera_py(self, smiles_filename, predictions_filename):
+		"""
+		Executes libOPERA_Py.
+		"""
+		logging.warning("Executing libOPERA_Py library.")
+		self.opera.OPERA('-s', smiles_filename, '-o', predictions_filename, '-a')  # TODO: Try specific props (is it faster?).
 
 	def execute_opera(self, smiles_filename, predictions_filename):
 		"""
@@ -129,8 +129,8 @@ class OPERACLI(CLIArgs, OPERAResults):
 			self.smiles_full_path = smiles_tempfile.name
 			self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
 			logging.warning("Initiating OPERA CLI execution.")
-			# self.execute_opera_py(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
-			self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
+			self.execute_opera_py(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
+			# self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
 			logging.warning("Finished executing OPERA CLI.")
 			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
 			self.remove_temp_files(smiles_tempfile)
