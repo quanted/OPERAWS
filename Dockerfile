@@ -1,5 +1,6 @@
 # 11/04/20 - latest OPERA version supports 3.6 
-FROM python:3.6-slim
+# FROM python:3.6-slim
+FROM python:3.8-slim
 # FROM python:2.7-slim
 
 # Install requirements
