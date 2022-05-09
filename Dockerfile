@@ -14,14 +14,14 @@ RUN	mkdir -p /usr/share/man/man1 && \
 	apt-get update && \
 	apt-get install -y openjdk-11-jre unzip wget
 
-# Installs OPERA Python module:
-RUN	wget https://github.com/kmansouri/OPERA/releases/download/v2.8.2/libOPERA2.8_Py.tar.gz
-RUN	tar xzf libOPERA2.8_Py.tar.gz
-RUN	rm libOPERA2.8_Py.tar.gz
-RUN cd libOPERA2_Py/ && \
-	./OPERA2.8_Py_mcr.install -mode silent -agreeToLicense yes
-RUN cd /usr/local/bin/OPERA/application/ && \
-	python setup.py install
+# # Installs OPERA Python module:
+# RUN	wget https://github.com/kmansouri/OPERA/releases/download/v2.8.2/libOPERA2.8_Py.tar.gz
+# RUN	tar xzf libOPERA2.8_Py.tar.gz
+# RUN	rm libOPERA2.8_Py.tar.gz
+# RUN cd libOPERA2_Py/ && \
+# 	./OPERA2.8_Py_mcr.install -mode silent -agreeToLicense yes
+# RUN cd /usr/local/bin/OPERA/application/ && \
+# 	python setup.py install
 
 # # TODO: Non-root user
 
