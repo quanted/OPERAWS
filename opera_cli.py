@@ -130,6 +130,7 @@ class OPERACLI(CLIArgs, OPERAResults):
 			self.predictions_full_path = os.path.join(PROJECT_ROOT, "temp", self.generate_filename() + ".csv")
 			logging.warning("Initiating OPERA CLI execution.")
 			self.execute_opera_py(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
+			# self.execute_opera_linux(self.smiles_full_path, self.predictions_full_path)  # runs opera python lib
 			logging.warning("Finished executing OPERA CLI.")
 			predictions_data = self.get_predictions(self.predictions_full_path)  # gets predictions from .csv
 			self.remove_temp_files(smiles_tempfile)
