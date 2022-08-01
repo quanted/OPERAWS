@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     # image: quanted/operaws
-    image: docker pull ghcr.io/quanted/operaws:dev-c8a28063bce8c3e18f7bcbb57749d4b19b9bd217
+    image: ghcr.io/quanted/operaws:dev-c8a28063bce8c3e18f7bcbb57749d4b19b9bd217
     container_name: operaws
     ports:
       - "3344:3344"
