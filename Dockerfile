@@ -5,9 +5,9 @@ COPY requirements.txt /tmp
 RUN pip install -r /tmp/requirements.txt
 
 ENV OPERA_EXE_PATH=/usr/local/bin/OPERA/application/run_OPERA.sh
-ENV MATLAB_RUNTIME_PATH=/usr/local/MATLAB/MATLAB_Runtime/v99
-ENV LD_LIBRARY_PATH=.:/usr/local/MATLAB/MATLAB_Runtime/v99/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v99/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v99/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v99/sys/opengl/lib/glnxa64
-ENV XAPPLRESDIR=/usr/local/MATLAB/MATLAB_Runtime/v99/X11/app-defaults
+ENV MATLAB_RUNTIME_PATH=/usr/local/MATLAB/MATLAB_Runtime/v912
+ENV LD_LIBRARY_PATH=.:/usr/local/MATLAB/MATLAB_Runtime/v912/runtime/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v912/bin/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v912/sys/os/glnxa64:/usr/local/MATLAB/MATLAB_Runtime/v912/sys/opengl/lib/glnxa64
+ENV XAPPLRESDIR=/usr/local/MATLAB/MATLAB_Runtime/v912/X11/app-defaults
 ENV IS_LINUX=True
 
 RUN	mkdir -p /usr/share/man/man1 && \
@@ -23,7 +23,7 @@ RUN cd libOPERA2_Py/ && \
 RUN cd /usr/local/bin/OPERA/application/ && \
 	python setup.py install
 
-# RUN rm /usr/local/MATLAB/MATLAB_Runtime/v99/java/jarext/log4j.*
+RUN rm /usr/local/MATLAB/MATLAB_Runtime/v912/java/jarext/log4j.*
 
 # # TODO: Non-root user
 
