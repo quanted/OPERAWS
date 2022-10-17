@@ -9,3 +9,4 @@ temp/*
 __pycache__
 env/
 *.pyc
+.env
