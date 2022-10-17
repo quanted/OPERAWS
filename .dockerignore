@@ -1,4 +1,5 @@
-env/
+.git
+.cache
 CDKDesc.csv
 CDKerr.log
 CDKlogfile.log
@@ -7,5 +8,7 @@ PadelFP.csv
 PaDELlogfile.log
 PaDELlogfileFP.log
 temp/*
-.git
-.cache
+__pycache__
+env/
+*.pyc
+.env
