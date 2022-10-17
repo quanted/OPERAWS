@@ -5,9 +5,9 @@ services:
   # OPERA Webservices
   operaws:
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
     # image: quanted/operaws
     image: ${OPERAWS_IMAGE:-quanted/operaws}
     container_name: operaws
