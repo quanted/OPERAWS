@@ -8,13 +8,14 @@ services:
     # build:
     #   context: .
     #   dockerfile: Dockerfile
-    # image: quanted/operaws
-    image: ${OPERAWS_IMAGE:-quanted/operaws}
+    image: ${OPERAWS_IMAGE}
     container_name: operaws
     ports:
       - "3344:3344"
     environment:
       - HOSTNAME=docker
+    env_file:
+      - ./.env
     # volumes:
     #   - .:/src/operaws
 
