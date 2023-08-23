@@ -1,12 +1,9 @@
-# FROM python:3.8-slim
-FROM ubuntu:22.04 as python-base
+FROM python:3.9-slim
 
 RUN	mkdir -p /usr/share/man/man1 && \
 	apt-get update && \
 	apt-get install -y \
-		python-is-python3 \
-		python3-pip \
-		openjdk-11-jre \
+		openjdk-17-jre \
 		unzip \
 		wget
 
