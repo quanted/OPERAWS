@@ -3,7 +3,7 @@ FROM python:3.9-slim
 RUN	mkdir -p /usr/share/man/man1 && \
 	apt-get update && \
 	apt-get install -y \
-		openjdk-17-jre \
+		openjdk-21-jre \
 		unzip \
 		wget
 
