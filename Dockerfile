@@ -26,9 +26,9 @@ ENV XAPPLRESDIR=/usr/local/MATLAB/MATLAB_Runtime/v912/X11/app-defaults
 ENV IS_LINUX=True
 
 # Installs OPERA Python module:
-RUN	wget https://github.com/kmansouri/OPERA/releases/download/v2.9.2/libOPERA2.9_Py.tar.gz
-RUN	tar xzf libOPERA2.9_Py.tar.gz
-RUN	rm libOPERA2.9_Py.tar.gz
+RUN	wget https://github.com/kmansouri/OPERA/releases/download/v2.9.2/libOPERA2.9_Py.tar.xz
+RUN	tar xzf libOPERA2.9_Py.tar.xz
+RUN	rm libOPERA2.9_Py.tar.xz
 RUN cd libOPERA2_Py/ && \
 	./OPERA2.9_Py_mcr.install -mode silent -agreeToLicense yes
 RUN cd /usr/local/bin/OPERA/application/ && \
