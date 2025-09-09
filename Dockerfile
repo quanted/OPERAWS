@@ -27,7 +27,7 @@ ENV IS_LINUX=True
 
 # Installs OPERA Python module:
 RUN	wget https://github.com/kmansouri/OPERA/releases/download/v2.9.2/libOPERA2.9_Py.tar.xz
-RUN	tar xzf libOPERA2.9_Py.tar.xz
+RUN	tar xJf libOPERA2.9_Py.tar.xz
 RUN	rm libOPERA2.9_Py.tar.xz
 RUN cd libOPERA2_Py/ && \
 	./OPERA2.9_Py_mcr.install -mode silent -agreeToLicense yes
